@@ -216,9 +216,9 @@ Return ONLY valid JSON:
 # =========================
 # UI
 # =========================
-st.title("🚀 Dynamic Lead Intelligence Platform (Groq)")
+st.title("Dynamic Lead Intelligence Platform (Groq)")
 st.caption(
-    "LinkedIn data is extracted via Apify. Lead scoring is done by Groq LLM with dynamic reasons (no ML model)."
+    "LinkedIn data is extracted via Apify. Lead scoring is done by Groq LLM with dynamic reasons."
 )
 
 col1, col2 = st.columns(2)
