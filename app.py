@@ -262,7 +262,7 @@ if linkedin_url and linkedin_url.strip() != st.session_state.prev_url:
 
 
 # Extract button
-if st.button("🔍 Extract LinkedIn Data"):
+if st.button(" Extract LinkedIn Data"):
     if not linkedin_url:
         st.warning("Please enter LinkedIn URL.")
     else:
@@ -337,7 +337,7 @@ else:
 st.divider()
 st.subheader("Step 2: Generate Score (Groq)")
 
-if st.button("⚡ Generate Score"):
+if st.button(" Generate Score"):
     if not st.session_state.extracted:
         st.warning("Please extract LinkedIn data first.")
     else:
