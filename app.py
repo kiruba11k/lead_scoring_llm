@@ -8,14 +8,14 @@ from datetime import datetime
 # PAGE CONFIG
 # =========================
 st.set_page_config(
-    page_title="Dynamic Lead Intelligence",
+    page_title="Lead Intelligence Platform",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="collapsed",
 )
 
 
 # =========================
-# MODERN UI CSS (FIXED LAYOUT)
+# UI THEME CSS (NEW PATTERN)
 # =========================
 st.markdown(
     """
@@ -24,104 +24,114 @@ st.markdown(
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css');
 
 :root{
-  --bg1:#050814;
-  --bg2:#0b1220;
-  --panel: rgba(255,255,255,0.06);
-  --panel2: rgba(255,255,255,0.08);
+  --bg:#070B18;
+  --bg2:#0B1224;
+  --card: rgba(255,255,255,0.06);
+  --card2: rgba(255,255,255,0.09);
   --border: rgba(255,255,255,0.12);
-  --text: #e5e7eb;
-  --muted: rgba(229,231,235,0.72);
-  --accent: #60a5fa;
-  --accent2:#a78bfa;
-  --good:#22c55e;
+  --text:#E5E7EB;
+  --muted: rgba(229,231,235,0.70);
+
+  --primary:#22c55e;
+  --primary2:#06b6d4;
+  --danger:#ef4444;
   --warn:#f59e0b;
-  --bad:#ef4444;
+  --info:#60a5fa;
 }
 
-/* Full background */
+/* Background */
 .stApp{
   font-family: "Inter", sans-serif;
   background:
-    radial-gradient(900px 500px at 10% 10%, rgba(96,165,250,0.25), transparent 55%),
-    radial-gradient(900px 500px at 90% 20%, rgba(167,139,250,0.18), transparent 55%),
-    radial-gradient(900px 600px at 40% 95%, rgba(34,197,94,0.10), transparent 60%),
-    linear-gradient(180deg, var(--bg1) 0%, var(--bg2) 65%, var(--bg1) 100%);
+    radial-gradient(800px 500px at 10% 10%, rgba(34,197,94,0.16), transparent 60%),
+    radial-gradient(800px 500px at 90% 20%, rgba(6,182,212,0.14), transparent 60%),
+    radial-gradient(800px 500px at 40% 90%, rgba(96,165,250,0.12), transparent 60%),
+    linear-gradient(180deg, var(--bg) 0%, var(--bg2) 60%, var(--bg) 100%);
   color: var(--text);
 }
 
-/* Remove top blank padding */
+/* Remove Streamlit default padding */
 .block-container{
-  padding-top: 0.8rem !important;
-  padding-bottom: 2.2rem !important;
+  padding-top: 1rem !important;
+  padding-bottom: 2rem !important;
 }
 
-/* Change Streamlit header bar */
+/* Hide Streamlit default top header + toolbar */
 header[data-testid="stHeader"]{
-  background: rgba(5,8,20,0.72) !important;
-  backdrop-filter: blur(10px) !important;
-  border-bottom: 1px solid rgba(255,255,255,0.08) !important;
+  display:none !important;
+}
+div[data-testid="stToolbar"]{
+  display:none !important;
+}
+#MainMenu{
+  visibility:hidden !important;
+}
+footer{
+  visibility:hidden !important;
 }
 
-/* Make toolbar icons visible */
-header[data-testid="stHeader"] *{
-  color: rgba(229,231,235,0.85) !important;
+/* Top Hero Header */
+.hero{
+  width:100%;
+  padding: 22px 22px;
+  border-radius: 22px;
+  background: linear-gradient(135deg, rgba(34,197,94,0.16), rgba(6,182,212,0.12));
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: 0px 25px 70px rgba(0,0,0,0.45);
+  position: relative;
+  overflow:hidden;
+  animation: fadeIn 0.6s ease;
 }
 
-/* Sidebar */
-section[data-testid="stSidebar"]{
-  background: rgba(255,255,255,0.03) !important;
-  border-right: 1px solid rgba(255,255,255,0.08) !important;
+.hero:before{
+  content:"";
+  position:absolute;
+  inset:-80px;
+  background: radial-gradient(circle at 30% 30%, rgba(34,197,94,0.20), transparent 60%);
+  filter: blur(12px);
 }
 
-/* NAVBAR */
-.navbar{
-  width: 100%;
-  padding: 14px 16px;
-  border-radius: 18px;
-  border: 1px solid rgba(255,255,255,0.10);
-  background: linear-gradient(135deg, rgba(96,165,250,0.14), rgba(167,139,250,0.10));
-  box-shadow: 0px 18px 55px rgba(0,0,0,0.35);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  position: sticky;
-  top: 0.6rem;
-  z-index: 50;
+.hero-inner{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  flex-wrap:wrap;
 }
 
 .brand{
   display:flex;
+  gap:14px;
   align-items:center;
-  gap:10px;
 }
 
-.brand-icon{
-  width: 42px;
-  height: 42px;
-  border-radius: 14px;
+.logo{
+  width:48px;
+  height:48px;
+  border-radius:16px;
   background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.12);
+  border:1px solid rgba(255,255,255,0.14);
   display:flex;
   align-items:center;
   justify-content:center;
   box-shadow: inset 0px 0px 0px 1px rgba(255,255,255,0.06);
 }
 
-.brand-title{
-  font-size: 18px;
-  font-weight: 900;
-  letter-spacing: -0.02em;
+.brand h1{
   margin:0;
+  font-size:20px;
+  font-weight:900;
+  letter-spacing:-0.02em;
 }
 
-.brand-sub{
-  font-size: 12px;
+.brand p{
+  margin:2px 0 0 0;
+  font-size:12.5px;
   color: var(--muted);
-  margin-top:2px;
 }
 
-.nav-pills{
+.pills{
   display:flex;
   gap:10px;
   flex-wrap:wrap;
@@ -136,47 +146,46 @@ section[data-testid="stSidebar"]{
   border-radius: 999px;
   background: rgba(255,255,255,0.06);
   border: 1px solid rgba(255,255,255,0.10);
-  color: var(--muted);
+  color: rgba(229,231,235,0.80);
   font-size: 12px;
 }
 
-/* Cards */
+/* Card */
 .card{
-  background: var(--panel);
+  margin-top: 14px;
+  background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 18px;
-  padding: 16px;
-  box-shadow: 0px 18px 55px rgba(0,0,0,0.28);
+  border-radius: 20px;
+  padding: 18px;
+  box-shadow: 0px 22px 60px rgba(0,0,0,0.35);
   backdrop-filter: blur(10px);
+  animation: fadeIn 0.55s ease;
 }
 
-.card:hover{
-  border-color: rgba(96,165,250,0.30);
-}
-
-/* Section title */
-.h2{
-  font-size: 15px;
+.card-title{
+  font-size: 14px;
   font-weight: 900;
-  letter-spacing: -0.01em;
-  margin: 0 0 8px 0;
+  letter-spacing:-0.01em;
+  margin:0 0 6px 0;
 }
-.desc{
+
+.card-sub{
   font-size: 12.5px;
   color: var(--muted);
-  margin: 0 0 12px 0;
+  margin:0 0 12px 0;
 }
 
-/* Input style */
+/* Inputs */
 .stTextInput input{
   background: rgba(255,255,255,0.06) !important;
-  border: 1px solid rgba(255,255,255,0.12) !important;
+  border: 1px solid rgba(255,255,255,0.14) !important;
   border-radius: 14px !important;
   color: var(--text) !important;
   padding: 12px !important;
 }
-.stTextInput input::placeholder{
-  color: rgba(229,231,235,0.40) !important;
+.stTextInput input:focus{
+  outline:none !important;
+  border: 1px solid rgba(34,197,94,0.45) !important;
 }
 
 /* Buttons */
@@ -184,8 +193,8 @@ section[data-testid="stSidebar"]{
   border-radius: 14px !important;
   padding: 12px 14px !important;
   border: 1px solid rgba(255,255,255,0.14) !important;
-  background: linear-gradient(135deg, rgba(96,165,250,0.95), rgba(167,139,250,0.92)) !important;
-  color: #050814 !important;
+  background: linear-gradient(135deg, rgba(34,197,94,0.95), rgba(6,182,212,0.90)) !important;
+  color: #06101c !important;
   font-weight: 900 !important;
   transition: transform 0.15s ease, filter 0.15s ease !important;
 }
@@ -194,18 +203,12 @@ section[data-testid="stSidebar"]{
   filter: brightness(1.05);
 }
 
-/* Secondary button (we wrap in div) */
-.secondary button{
-  background: rgba(255,255,255,0.08) !important;
-  color: var(--text) !important;
-}
-
-/* Key-Value */
+/* Output Blocks */
 .kv{
   display:grid;
-  grid-template-columns: 140px 1fr;
+  grid-template-columns: 150px 1fr;
   gap: 10px;
-  margin: 8px 0;
+  padding: 8px 0;
 }
 .k{
   color: var(--muted);
@@ -217,67 +220,21 @@ section[data-testid="stSidebar"]{
   font-weight: 650;
 }
 
-/* Badge */
+/* Score badge */
 .badge{
   display:inline-flex;
   align-items:center;
   gap:8px;
-  padding: 8px 12px;
+  padding: 9px 12px;
   border-radius: 999px;
   border: 1px solid rgba(255,255,255,0.12);
   font-weight: 900;
   font-size: 12px;
-  letter-spacing: 0.02em;
 }
-.badge-cold{ background: rgba(100,116,139,0.22); color:#cbd5e1;}
-.badge-cool{ background: rgba(59,130,246,0.22); color:#bfdbfe;}
-.badge-warm{ background: rgba(245,158,11,0.22); color:#fde68a;}
-.badge-hot { background: rgba(239,68,68,0.22); color:#fecaca;}
-
-/* Metric tiles */
-.metrics{
-  display:grid;
-  grid-template-columns: repeat(3, minmax(0,1fr));
-  gap: 12px;
-  margin-top: 12px;
-}
-.tile{
-  padding: 14px;
-  border-radius: 16px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.12);
-}
-.tile .label{
-  font-size: 12px;
-  color: var(--muted);
-}
-.tile .value{
-  margin-top: 6px;
-  font-size: 20px;
-  font-weight: 900;
-}
-
-/* Reason card */
-.reason{
-  padding: 12px;
-  border-radius: 16px;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.10);
-  margin-top: 10px;
-  display:flex;
-  gap:10px;
-  align-items:flex-start;
-}
-.reason-icon{
-  width: 28px;
-  height: 28px;
-  border-radius: 10px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background: rgba(96,165,250,0.16);
-  border: 1px solid rgba(255,255,255,0.12);
-}
+.badge-cold{ background: rgba(100,116,139,0.20); color:#cbd5e1;}
+.badge-cool{ background: rgba(59,130,246,0.18); color:#bfdbfe;}
+.badge-warm{ background: rgba(245,158,11,0.18); color:#fde68a;}
+.badge-hot { background: rgba(239,68,68,0.18); color:#fecaca;}
 
 hr{
   border:none;
@@ -285,6 +242,11 @@ hr{
   margin: 14px 0;
 }
 
+/* Animations */
+@keyframes fadeIn{
+  from{ opacity:0; transform: translateY(8px); }
+  to{ opacity:1; transform: translateY(0px); }
+}
 </style>
 """,
     unsafe_allow_html=True,
@@ -297,12 +259,8 @@ hr{
 APIFY_API_KEY = st.secrets.get("APIFY", "")
 GROQ_API_KEY = st.secrets.get("GROQ_API_KEY", "")
 
-if not APIFY_API_KEY:
-    st.error("Missing APIFY_API_KEY in Streamlit secrets.")
-    st.stop()
-
-if not GROQ_API_KEY:
-    st.error("Missing GROQ_API_KEY in Streamlit secrets.")
+if not APIFY_API_KEY or not GROQ_API_KEY:
+    st.error("Missing API keys. Please add APIFY_API_KEY and GROQ_API_KEY in Streamlit secrets.")
     st.stop()
 
 
@@ -342,11 +300,7 @@ def fetch_linkedin_profile(linkedin_url: str):
 
 
 def fetch_recent_posts(linkedin_url: str, limit: int = 2):
-    endpoint = (
-        "https://api.apify.com/v2/acts/"
-        "apimaestro~linkedin-batch-profile-posts-scraper/"
-        "run-sync-get-dataset-items"
-    )
+    endpoint = "https://api.apify.com/v2/acts/apimaestro~linkedin-batch-profile-posts-scraper/run-sync-get-dataset-items"
     params = {"token": APIFY_API_KEY}
     payload = {"includeEmail": False, "usernames": [linkedin_url.strip()]}
 
@@ -384,58 +338,44 @@ def compute_activity_days(posts: list):
         return None
 
 
-def groq_score_lead(prospect: dict):
+def groq_score_lead(payload: dict):
     url = "https://api.groq.com/openai/v1/chat/completions"
     model = "llama-3.1-8b-instant"
 
     prompt = f"""
-You are a Lead Intelligence & Scoring Engine.
+You are a Predictive Lead Scoring Engine for ANY sector.
 
-Classify the prospect into ONE category:
-HOT, WARM, COOL, or COLD.
+Classify the prospect into one:
+HOT, WARM, COOL, COLD
 
-Return:
-- priority
-- score (0 to 100)
-- confidence (0 to 100)
-- reasons (3 to 6)
-
-Rules:
-- HOT: strong decision-maker + strong fit + strong company signals + recent activity
-- WARM: good fit and decent seniority or company strength
-- COOL: mixed signals
-- COLD: weak fit or junior role or weak company signals
-
-IMPORTANT:
-If activity is missing, treat it as neutral. Do NOT force COLD.
-
-Prospect:
-{json.dumps(prospect, indent=2)}
-
-Return ONLY JSON:
+Return JSON only:
 {{
   "priority": "HOT|WARM|COOL|COLD",
   "score": 0-100,
   "confidence": 0-100,
   "reasons": ["...", "...", "..."]
 }}
+
+Rules:
+- Missing activity should be neutral, not negative.
+- Senior role + banking/finance company size/revenue should increase score.
+- If company info is strong but activity missing, still can be WARM/HOT.
+
+Prospect Payload:
+{json.dumps(payload, indent=2)}
 """
 
-    headers = {
-        "Authorization": f"Bearer {GROQ_API_KEY}",
-        "Content-Type": "application/json",
-    }
-
-    payload = {
+    headers = {"Authorization": f"Bearer {GROQ_API_KEY}", "Content-Type": "application/json"}
+    body = {
         "model": model,
         "messages": [
-            {"role": "system", "content": "You are a B2B sales intelligence analyst."},
+            {"role": "system", "content": "You score B2B leads using reasoning and evidence."},
             {"role": "user", "content": prompt},
         ],
         "temperature": 0.2,
     }
 
-    resp = requests.post(url, headers=headers, json=payload, timeout=60)
+    resp = requests.post(url, headers=headers, json=body, timeout=60)
     if resp.status_code != 200:
         raise RuntimeError(resp.text)
 
@@ -443,24 +383,7 @@ Return ONLY JSON:
     return json.loads(content)
 
 
-def get_current_role_and_company(profile_data: dict):
-    basic = profile_data.get("basic_info", {})
-    headline = basic.get("headline", "") or ""
-    company = basic.get("current_company", "") or ""
-
-    title = headline
-    exp = profile_data.get("experience", [])
-    if isinstance(exp, list):
-        for e in exp:
-            if e.get("is_current") and e.get("title"):
-                title = e.get("title", title)
-                company = e.get("company", company)
-                break
-
-    return title, company
-
-
-def priority_badge(priority: str):
+def badge(priority: str):
     p = (priority or "").upper().strip()
     cls = "badge-cold"
     icon = "fa-snowflake"
@@ -471,11 +394,15 @@ def priority_badge(priority: str):
     elif p == "COOL":
         cls, icon = "badge-cool", "fa-wind"
 
-    return f"""
-    <span class="badge {cls}">
-        <i class="fa-solid {icon}"></i> {p}
-    </span>
-    """
+    return f"""<span class="badge {cls}"><i class="fa-solid {icon}"></i> {p}</span>"""
+
+
+def get_basic(profile_data: dict):
+    basic = profile_data.get("basic_info", {})
+    name = basic.get("fullname", "N/A")
+    headline = basic.get("headline", "N/A")
+    location = basic.get("location", {}).get("full", "N/A")
+    return name, headline, location
 
 
 # =========================
@@ -501,287 +428,232 @@ if "debug_payload" not in st.session_state:
 
 
 # =========================
-# NAVBAR
+# HEADER (CUSTOM)
 # =========================
 st.markdown(
     """
-<div class="navbar">
-  <div class="brand">
-    <div class="brand-icon"><i class="fa-solid fa-layer-group"></i></div>
-    <div>
-      <div class="brand-title">Dynamic Lead Intelligence</div>
-      <div class="brand-sub">Extraction via Apify · Scoring via Groq · Dynamic reasons</div>
+<div class="hero">
+  <div class="hero-inner">
+    <div class="brand">
+      <div class="logo"><i class="fa-solid fa-chart-network"></i></div>
+      <div>
+        <h1>Lead Intelligence Platform</h1>
+        <p>Dynamic extraction · Sector-independent scoring · Transparent reasons</p>
+      </div>
     </div>
-  </div>
-  <div class="nav-pills">
-    <div class="pill"><i class="fa-solid fa-database"></i> Live Extraction</div>
-    <div class="pill"><i class="fa-solid fa-brain"></i> LLM Scoring</div>
-    <div class="pill"><i class="fa-solid fa-shield-halved"></i> Secrets Protected</div>
+    <div class="pills">
+      <div class="pill"><i class="fa-solid fa-database"></i> Apify</div>
+      <div class="pill"><i class="fa-solid fa-brain"></i> Groq</div>
+      <div class="pill"><i class="fa-solid fa-lock"></i> Secrets</div>
+    </div>
   </div>
 </div>
 """,
     unsafe_allow_html=True,
 )
 
-st.markdown("<div style='height:14px;'></div>", unsafe_allow_html=True)
-
 
 # =========================
-# SIDEBAR CONTROLS
+# TOP INPUT PANEL (ALL INPUTS HERE)
 # =========================
-with st.sidebar:
-    st.markdown("### Controls")
-    st.caption("Reset the current prospect without refreshing the app.")
+st.markdown(
+    """
+<div class="card">
+  <div class="card-title"><i class="fa-solid fa-pen-to-square"></i> Input Panel</div>
+  <div class="card-sub">Enter LinkedIn URL + company details. Extract and score in one place.</div>
+</div>
+""",
+    unsafe_allow_html=True,
+)
 
-    st.markdown("<div class='secondary'>", unsafe_allow_html=True)
-    if st.button("Reset Prospect"):
-        st.session_state.profile_data = None
-        st.session_state.posts = []
-        st.session_state.activity_days = None
-        st.session_state.result = None
-        st.session_state.debug_payload = None
-        st.rerun()
-    st.markdown("</div>", unsafe_allow_html=True)
+colA, colB, colC = st.columns([1.6, 1, 1], gap="large")
 
+with colA:
+    linkedin_url = st.text_input("LinkedIn Profile URL", placeholder="https://www.linkedin.com/in/username/")
 
-# =========================
-# MAIN LAYOUT
-# =========================
-left, right = st.columns([1.15, 0.85], gap="large")
+with colB:
+    company_name = st.text_input("Company Name", placeholder="Cadence Bank")
+    company_size = st.text_input("Company Size", placeholder="5,001-10,000 employees")
 
-with left:
-    st.markdown(
-        """
-        <div class="card">
-            <div class="h2"><i class="fa-solid fa-link"></i> Prospect Extraction</div>
-            <div class="desc">Enter LinkedIn URL to extract profile + recent posts activity.</div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+with colC:
+    annual_revenue = st.text_input("Annual Revenue", placeholder="$1.3 Billion")
+    industry = st.text_input("Industry", placeholder="Banking")
 
-    linkedin_url = st.text_input(
-        "LinkedIn Profile URL",
-        placeholder="https://www.linkedin.com/in/username/",
-        key="linkedin_url_input",
-    )
+# Reset when URL changes
+if linkedin_url and linkedin_url.strip() != st.session_state.prev_url:
+    st.session_state.prev_url = linkedin_url.strip()
+    st.session_state.profile_data = None
+    st.session_state.posts = []
+    st.session_state.activity_days = None
+    st.session_state.result = None
+    st.session_state.debug_payload = None
 
-    # Reset when URL changes
-    if linkedin_url and linkedin_url.strip() != st.session_state.prev_url:
-        st.session_state.prev_url = linkedin_url.strip()
-        st.session_state.profile_data = None
-        st.session_state.posts = []
-        st.session_state.activity_days = None
-        st.session_state.result = None
-        st.session_state.debug_payload = None
+btn1, btn2, btn3 = st.columns([1, 1, 1], gap="medium")
 
-    btn1, btn2 = st.columns([1, 1], gap="medium")
-    with btn1:
-        extract_btn = st.button("Extract Profile + Activity")
-    with btn2:
-        st.markdown("<div class='secondary'>", unsafe_allow_html=True)
-        show_debug = st.button("Show Debug Payload")
-        st.markdown("</div>", unsafe_allow_html=True)
+with btn1:
+    extract_btn = st.button("Extract Profile")
+with btn2:
+    score_btn = st.button("Generate Score")
+with btn3:
+    debug_btn = st.button("Show Debug Payload")
 
-    if extract_btn:
-        if not linkedin_url:
-            st.warning("Please enter a LinkedIn URL.")
+if extract_btn:
+    if not linkedin_url:
+        st.warning("Please enter LinkedIn URL.")
+    else:
+        with st.spinner("Extracting profile..."):
+            profile = fetch_linkedin_profile(linkedin_url)
+
+        with st.spinner("Extracting recent posts..."):
+            posts = fetch_recent_posts(linkedin_url, limit=2)
+            activity_days = compute_activity_days(posts)
+
+        st.session_state.profile_data = profile
+        st.session_state.posts = posts
+        st.session_state.activity_days = activity_days
+
+        if profile:
+            st.success("Extraction completed successfully.")
         else:
-            with st.spinner("Extracting LinkedIn profile..."):
-                profile_data = fetch_linkedin_profile(linkedin_url)
+            st.error("Extraction failed. Check URL or Apify response.")
 
-            with st.spinner("Extracting recent posts..."):
-                posts = fetch_recent_posts(linkedin_url, limit=2)
-                activity_days = compute_activity_days(posts)
+if score_btn:
+    if not st.session_state.profile_data:
+        st.warning("Extract profile first.")
+    else:
+        name, headline, location = get_basic(st.session_state.profile_data)
 
-            st.session_state.profile_data = profile_data
-            st.session_state.posts = posts
-            st.session_state.activity_days = activity_days
+        payload = {
+            "name": name,
+            "headline": headline,
+            "location": location,
+            "company_name": company_name,
+            "company_size": company_size,
+            "annual_revenue": annual_revenue,
+            "industry": industry,
+            "activity_days": st.session_state.activity_days,
+            "recent_posts_count": len(st.session_state.posts),
+        }
 
-            if profile_data:
-                st.success("Extraction completed successfully.")
-            else:
-                st.error("Extraction failed. Check LinkedIn URL or Apify response.")
+        st.session_state.debug_payload = payload
 
-    st.markdown("<hr/>", unsafe_allow_html=True)
+        try:
+            with st.spinner("Scoring lead..."):
+                res = groq_score_lead(payload)
+            st.session_state.result = res
+            st.success("Scoring completed successfully.")
+        except Exception as e:
+            st.error(f"Scoring failed: {e}")
 
+if debug_btn and st.session_state.debug_payload:
+    with st.expander("Debug Payload Sent to Groq", expanded=True):
+        st.json(st.session_state.debug_payload)
+
+
+# =========================
+# OUTPUT PANEL (SEPARATE AREA)
+# =========================
+st.markdown(
+    """
+<div class="card">
+  <div class="card-title"><i class="fa-solid fa-display"></i> Output Panel</div>
+  <div class="card-sub">Extracted data and scoring results appear below.</div>
+</div>
+""",
+    unsafe_allow_html=True,
+)
+
+out1, out2 = st.columns([1.2, 0.8], gap="large")
+
+with out1:
     st.markdown(
         """
         <div class="card">
-            <div class="h2"><i class="fa-solid fa-building"></i> Manual Company Details</div>
-            <div class="desc">Only these 4 fields are needed for scoring.</div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    company_name = st.text_input("Company Name", placeholder="MidCap Financial")
-    company_size = st.text_input("Company Size", placeholder="201-500 employees")
-    annual_revenue = st.text_input("Annual Revenue", placeholder="$128.9 Million or $1.3 Billion")
-    industry = st.text_input("Industry", placeholder="Banking / Financial Services / Fintech")
-
-
-with right:
-    st.markdown(
-        """
-        <div class="card">
-            <div class="h2"><i class="fa-solid fa-user"></i> Extracted Preview</div>
-            <div class="desc">Profile information and activity signal.</div>
+          <div class="card-title"><i class="fa-solid fa-user"></i> Extracted Prospect Info</div>
+          <div class="card-sub">Profile details from LinkedIn extraction.</div>
         </div>
         """,
         unsafe_allow_html=True,
     )
 
     if st.session_state.profile_data:
-        basic = st.session_state.profile_data.get("basic_info", {})
-        name = basic.get("fullname", "N/A")
-        headline = basic.get("headline", "N/A")
-        location = basic.get("location", {}).get("full", "N/A")
-
-        title, current_company = get_current_role_and_company(st.session_state.profile_data)
+        name, headline, location = get_basic(st.session_state.profile_data)
 
         st.markdown(
             f"""
-            <div class="card" style="margin-top: 12px;">
-                <div class="kv"><div class="k">Name</div><div class="v">{name}</div></div>
-                <div class="kv"><div class="k">Headline</div><div class="v">{headline}</div></div>
-                <div class="kv"><div class="k">Location</div><div class="v">{location}</div></div>
-                <hr/>
-                <div class="kv"><div class="k">Current Role</div><div class="v">{title}</div></div>
-                <div class="kv"><div class="k">Current Company</div><div class="v">{current_company}</div></div>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-
-        activity_days = st.session_state.activity_days
-        posts = st.session_state.posts
-
-        activity_text = "Not available"
-        last_post_text = "Not available"
-
-        if activity_days is not None:
-            activity_text = str(activity_days)
-
-        if posts:
-            last_post_text = posts[0].get("posted_at", {}).get("relative", "Available")
-
-        st.markdown(
-            f"""
-            <div class="card" style="margin-top: 12px;">
-                <div class="h2"><i class="fa-solid fa-chart-line"></i> Activity</div>
-                <div class="kv"><div class="k">Recent Activity Days</div><div class="v">{activity_text}</div></div>
-                <div class="kv"><div class="k">Last Post</div><div class="v">{last_post_text}</div></div>
+            <div class="card">
+              <div class="kv"><div class="k">Name</div><div class="v">{name}</div></div>
+              <div class="kv"><div class="k">Headline</div><div class="v">{headline}</div></div>
+              <div class="kv"><div class="k">Location</div><div class="v">{location}</div></div>
+              <hr/>
+              <div class="kv"><div class="k">Recent Activity Days</div><div class="v">{st.session_state.activity_days if st.session_state.activity_days is not None else "Not available"}</div></div>
+              <div class="kv"><div class="k">Recent Posts Found</div><div class="v">{len(st.session_state.posts)}</div></div>
             </div>
             """,
             unsafe_allow_html=True,
         )
     else:
-        st.info("Enter a LinkedIn URL and extract profile first.")
+        st.info("No extracted data yet. Please extract a LinkedIn profile.")
 
-    st.markdown("<hr/>", unsafe_allow_html=True)
-
+with out2:
     st.markdown(
         """
         <div class="card">
-            <div class="h2"><i class="fa-solid fa-wand-magic-sparkles"></i> Lead Scoring</div>
-            <div class="desc">Groq predicts priority with reasons dynamically.</div>
+          <div class="card-title"><i class="fa-solid fa-ranking-star"></i> Scoring Results</div>
+          <div class="card-sub">Priority, score, confidence and dynamic reasons.</div>
         </div>
         """,
         unsafe_allow_html=True,
     )
 
-    score_btn = st.button("Generate Score")
-
-    if score_btn:
-        if not st.session_state.profile_data:
-            st.warning("Extract LinkedIn profile first.")
-        else:
-            title, current_company = get_current_role_and_company(st.session_state.profile_data)
-            basic = st.session_state.profile_data.get("basic_info", {})
-
-            payload = {
-                "name": basic.get("fullname"),
-                "title": title,
-                "location": basic.get("location", {}).get("full"),
-                "current_company": current_company,
-                "company_name": company_name,
-                "company_size": company_size,
-                "annual_revenue": annual_revenue,
-                "industry": industry,
-                "activity_days": st.session_state.activity_days,
-                "recent_posts_count": len(st.session_state.posts),
-            }
-
-            st.session_state.debug_payload = payload
-
-            try:
-                with st.spinner("Scoring with Groq..."):
-                    result = groq_score_lead(payload)
-                st.session_state.result = result
-                st.success("Scoring completed successfully.")
-            except Exception as e:
-                st.error(f"Scoring failed: {e}")
-
     if st.session_state.result:
         res = st.session_state.result
-        priority = (res.get("priority") or "").upper()
+        priority = res.get("priority", "COLD")
         score = res.get("score", 0)
         confidence = res.get("confidence", 0)
         reasons = res.get("reasons", [])
 
         st.markdown(
             f"""
-            <div class="card" style="margin-top: 12px;">
-                <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
-                    <div>
-                        <div class="h2">Scoring Results</div>
-                        <div style="margin-top:8px;">{priority_badge(priority)}</div>
-                    </div>
-                    <div style="text-align:right;">
-                        <div class="pill"><i class="fa-solid fa-gauge-high"></i> Score</div>
-                        <div style="font-size:28px; font-weight:900; margin-top:6px;">{score}/100</div>
-                    </div>
+            <div class="card">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                  <div class="card-title">Priority</div>
+                  {badge(priority)}
                 </div>
-
-                <div class="metrics">
-                    <div class="tile">
-                        <div class="label">Confidence</div>
-                        <div class="value">{confidence}%</div>
-                    </div>
-                    <div class="tile">
-                        <div class="label">Recent Posts</div>
-                        <div class="value">{len(st.session_state.posts)}</div>
-                    </div>
-                    <div class="tile">
-                        <div class="label">Activity Days</div>
-                        <div class="value">{st.session_state.activity_days if st.session_state.activity_days is not None else "N/A"}</div>
-                    </div>
+                <div style="text-align:right;">
+                  <div class="card-title">Score</div>
+                  <div style="font-size:30px; font-weight:900;">{score}/100</div>
                 </div>
-
-                <hr/>
-                <div class="h2">Why this prediction?</div>
+              </div>
+              <hr/>
+              <div class="kv"><div class="k">Confidence</div><div class="v">{confidence}%</div></div>
             </div>
             """,
             unsafe_allow_html=True,
         )
 
-        if isinstance(reasons, list) and reasons:
+        st.markdown(
+            """
+            <div class="card">
+              <div class="card-title"><i class="fa-solid fa-circle-info"></i> Why this prediction?</div>
+              <div class="card-sub">Generated dynamically by Groq based on extracted + manual inputs.</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        if reasons and isinstance(reasons, list):
             for r in reasons:
                 st.markdown(
                     f"""
-                    <div class="reason">
-                        <div class="reason-icon"><i class="fa-solid fa-check"></i></div>
-                        <div style="font-size:13px; font-weight:650; color: rgba(229,231,235,0.92);">
-                            {r}
-                        </div>
+                    <div class="card" style="padding:14px; background: rgba(255,255,255,0.05);">
+                      <div style="font-size:13px; font-weight:650;">{r}</div>
                     </div>
                     """,
                     unsafe_allow_html=True,
                 )
         else:
-            st.info("No reasons returned by the model.")
-
-    if show_debug and st.session_state.debug_payload:
-        with st.expander("Debug Payload Sent to Groq", expanded=True):
-            st.json(st.session_state.debug_payload)
+            st.info("No reasons returned.")
+    else:
+        st.info("No scoring result yet. Generate score after extraction.")
