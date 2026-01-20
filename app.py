@@ -358,29 +358,55 @@ Return JSON only:
 
 Rules:
 - Missing activity should be neutral, not negative.
-- Senior role + banking/finance company size/revenue should increase score.
+- Senior role + strong company size/revenue should increase score.
 - If company info is strong but activity missing, still can be WARM/HOT.
 
 Prospect Payload:
 {json.dumps(payload, indent=2)}
 """
 
-    headers = {"Authorization": f"Bearer {GROQ_API_KEY}", "Content-Type": "application/json"}
+    headers = {
+        "Authorization": f"Bearer {GROQ_API_KEY}",
+        "Content-Type": "application/json"
+    }
+
     body = {
         "model": model,
         "messages": [
-            {"role": "system", "content": "You score B2B leads using reasoning and evidence."},
+            {"role": "system", "content": "You are a lead scoring engine. Output JSON only."},
             {"role": "user", "content": prompt},
         ],
         "temperature": 0.2,
     }
 
     resp = requests.post(url, headers=headers, json=body, timeout=60)
-    if resp.status_code != 200:
-        raise RuntimeError(resp.text)
 
-    content = resp.json()["choices"][0]["message"]["content"]
-    return json.loads(content)
+    if resp.status_code != 200:
+        raise RuntimeError(f"Groq API error {resp.status_code}: {resp.text[:500]}")
+
+    raw = resp.json()["choices"][0]["message"]["content"].strip()
+
+    # ---- DEBUG SAFE PRINT (optional) ----
+    # st.write("RAW RESPONSE:", raw)
+
+    # 1) If response contains ```json ... ``` remove codeblock
+    raw = raw.replace("```json", "").replace("```", "").strip()
+
+    # 2) Extract first JSON object using regex
+    match = re.search(r"\{.*\}", raw, re.DOTALL)
+    if not match:
+        raise ValueError(f"Groq did not return JSON. Raw output:\n{raw[:500]}")
+
+    json_text = match.group(0).strip()
+
+    # 3) Parse JSON safely
+    data = json.loads(json_text)
+
+    # 4) Validate required fields
+    if "priority" not in data:
+        raise ValueError(f"Invalid JSON format: {data}")
+
+    return data
 
 
 def badge(priority: str):
