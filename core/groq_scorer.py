@@ -8,7 +8,7 @@ class GroqLeadScorer:
             raise ValueError("Groq API key missing")
         self.api_key = api_key
         self.url = "https://api.groq.com/openai/v1/chat/completions"
-        self.model = "llama3-70b-8192"
+        self.model = "llama-3.1-8b-instant"
 
     def score(self, prospect: dict) -> dict:
         """
