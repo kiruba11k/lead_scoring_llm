@@ -4,7 +4,7 @@ from typing import Dict, Optional
 
 
 class GroqLeadScorer:
-    def __init__(self, groq_api_key: str, model: str = "llama-3.1-70b-versatile"):
+    def __init__(self, groq_api_key: str, model: str = "llama-3.1-8b-instant"):
         self.api_key = groq_api_key
         self.model = model
         self.base_url = "https://api.groq.com/openai/v1/chat/completions"
