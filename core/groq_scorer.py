@@ -1,54 +1,46 @@
-import json
 import requests
-from typing import Dict, Optional
-
+import json
+import os
 
 class GroqLeadScorer:
-    def __init__(self, groq_api_key: str, model: str = "llama-3.1-8b-instant"):
-        self.api_key = groq_api_key
-        self.model = model
-        self.base_url = "https://api.groq.com/openai/v1/chat/completions"
+    def __init__(self, api_key: str):
+        if not api_key:
+            raise ValueError("Groq API key missing")
+        self.api_key = api_key
+        self.url = "https://api.groq.com/openai/v1/chat/completions"
+        self.model = "llama3-70b-8192"
 
-    def score(self, payload: Dict) -> Optional[Dict]:
+    def score(self, prospect: dict) -> dict:
         """
         Returns:
         {
-          "priority": "HOT|WARM|COOL|COLD",
-          "confidence": 0-100,
-          "reasons": [...],
-          "key_factors": {...},
-          "next_steps": [...],
-          "risk_flags": [...]
+          priority: HOT|WARM|COOL|COLD,
+          confidence: float (0-100),
+          reasons: [str, str, ...]
         }
         """
-        system_prompt = """
-You are a Lead Scoring AI.
 
-Your job:
-- Predict lead priority: HOT / WARM / COOL / COLD
-- Must work for ANY sector (banking, SaaS, healthcare, logistics, etc.)
-- Use ONLY given input data. No assumptions.
-- Provide dynamic reasons (not generic).
-- Output MUST be valid JSON only.
-"""
+        prompt = f"""
+You are a B2B lead intelligence system.
 
-        user_prompt = f"""
-Lead Data (JSON):
-{json.dumps(payload, indent=2)}
+Classify the prospect into one category:
+HOT, WARM, COOL, or COLD.
 
 Rules:
-1) HOT: decision maker + strong relevance + company fit + active/engaged
-2) WARM: good fit but missing some signals (activity unclear or mid seniority)
-3) COOL: weak fit or low urgency
-4) COLD: irrelevant role/industry OR missing key data OR low fit
+- HOT: senior decision-maker + strong domain fit + large org or revenue
+- WARM: senior or mid-senior + good fit
+- COOL: senior but weak fit or low activity
+- COLD: junior or irrelevant
 
-Return JSON with keys:
-priority (string),
-confidence (number 0-100),
-reasons (array of short bullet strings),
-key_factors (object with important extracted signals),
-next_steps (array),
-risk_flags (array)
+Prospect Data (may have missing fields):
+{json.dumps(prospect, indent=2)}
+
+Respond ONLY in valid JSON:
+{{
+  "priority": "...",
+  "confidence": 0-100,
+  "reasons": ["...", "..."]
+}}
 """
 
         headers = {
@@ -56,30 +48,23 @@ risk_flags (array)
             "Content-Type": "application/json"
         }
 
-        body = {
+        payload = {
             "model": self.model,
-            "temperature": 0.2,
             "messages": [
-                {"role": "system", "content": system_prompt.strip()},
-                {"role": "user", "content": user_prompt.strip()},
-            ]
+                {"role": "system", "content": "You are an expert sales intelligence analyst."},
+                {"role": "user", "content": prompt}
+            ],
+            "temperature": 0.2
         }
 
+        resp = requests.post(self.url, headers=headers, json=payload, timeout=60)
+
+        if resp.status_code != 200:
+            raise RuntimeError(f"Groq API error: {resp.text}")
+
+        text = resp.json()["choices"][0]["message"]["content"]
+
         try:
-            resp = requests.post(self.base_url, headers=headers, json=body, timeout=60)
-            if resp.status_code != 200:
-                return None
-
-            content = resp.json()["choices"][0]["message"]["content"].strip()
-
-            # Must be JSON only
-            result = json.loads(content)
-
-            # Basic validation
-            if "priority" not in result or "confidence" not in result:
-                return None
-
-            return result
-
+            return json.loads(text)
         except Exception:
-            return None
+            raise RuntimeError(f"Invalid JSON from LLM:\n{text}")
