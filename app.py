@@ -151,7 +151,7 @@ def groq_score_lead(prospect: dict):
     """
 
     url = "https://api.groq.com/openai/v1/chat/completions"
-    model = "llama3-70b-8192"
+    model = "llama-3.1-8b-instant"
 
     prompt = f"""
 You are a Lead Intelligence & Scoring Engine.
